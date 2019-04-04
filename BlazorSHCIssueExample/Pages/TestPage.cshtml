@@ -1,0 +1,14 @@
+﻿@page "/test"
+
+<h1>Validation test</h1>
+
+<p>
+    <Validation Validator="@IsNotEmpty">
+        <TextEdit Text="hello" />
+    </Validation>
+</p>
+
+@functions{
+    public static bool IsNotEmpty( string value ) => !string.IsNullOrEmpty( value );
+    public static void IsNotEmpty( ValidatorEventArgs e ) => e.Status = IsNotEmpty( e.Value as string ) ? ValidationStatus.Success : ValidationStatus.Error;
+}

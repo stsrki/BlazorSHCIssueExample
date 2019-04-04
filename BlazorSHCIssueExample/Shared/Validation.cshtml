@@ -1,0 +1,50 @@
+﻿<CascadingValue Value=this>
+    @ChildContent
+</CascadingValue>
+@functions{
+    private object value;
+
+    internal void InitInputValue( object value )
+    {
+        this.value = value;
+
+        Validate();
+    }
+
+    internal void UpdateInputValue( object value )
+    {
+        if ( this.value != value )
+        {
+            this.value = value;
+
+            Validate();
+        }
+    }
+
+    public ValidationStatus Validate()
+    {
+        var handler = Validator;
+
+        if ( handler != null )
+        {
+            var args = new ValidatorEventArgs( value );
+
+            handler( args );
+
+            if ( Status != args.Status )
+            {
+                Status = args.Status;
+
+                StateHasChanged();
+            }
+        }
+
+        return Status;
+    }
+
+    protected ValidationStatus Status { get; set; }
+
+    [Parameter] protected Action<ValidatorEventArgs> Validator { get; set; }
+
+    [Parameter] protected RenderFragment ChildContent { get; set; }
+}

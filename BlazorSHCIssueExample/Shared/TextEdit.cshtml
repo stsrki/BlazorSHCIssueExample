@@ -1,0 +1,31 @@
+﻿<input type="text" value="@Text" oninput="@HandleOnInput" />
+@functions{
+    string text;
+
+    protected override void OnInit()
+    {
+        ParentValidation?.InitInputValue( text );
+
+        base.OnInit();
+    }
+
+    void HandleOnInput( UIChangeEventArgs e )
+    {
+        Text = e?.Value?.ToString();
+        TextChanged?.Invoke( Text );
+    }
+
+    [Parameter]
+    string Text
+    {
+        get { return text; }
+        set
+        {
+            text = value;
+            ParentValidation?.UpdateInputValue( value );
+        }
+    }
+
+    [Parameter] Action<string> TextChanged { get; set; }
+    [CascadingParameter] protected Validation ParentValidation { get; set; }
+}
